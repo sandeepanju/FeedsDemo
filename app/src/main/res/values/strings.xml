@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">FeedDemo</string>
+    <string name="sucess_message">Data loaded successfully</string>
+    <string name="error_message">Error while loading data</string>
+    <string name="network_error_message">No Internet connection</string>
+    <string name="dummy_email">abc@mailinator.com</string>
 </resources>
