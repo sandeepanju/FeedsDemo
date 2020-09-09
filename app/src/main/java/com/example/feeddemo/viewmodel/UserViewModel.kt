@@ -13,22 +13,23 @@ import java.io.IOException
 
 class UserViewModel(private val userRepository: UserRepository) : ViewModel() {
      val data = userRepository.data
-    val dataObserve : MutableLiveData<ViewState<LiveData<List<User>>>> = MutableLiveData()
+    val dataObserve : LiveData<ViewState<LiveData<List<User>>>> get() = _dataObserve
+   private val _dataObserve : MutableLiveData<ViewState<LiveData<List<User>>>> = MutableLiveData()
 
     init {
-        dataObserve.postValue(ViewState.Success(data))
+        _dataObserve.postValue(ViewState.Success(data))
     }
 
     fun fetchUserList(requestModel: RequestModel) {
         viewModelScope.launch {
             try {
-                dataObserve.postValue(ViewState.Loading)
+                _dataObserve.postValue(ViewState.Loading)
                 userRepository.refreshUserList(requestModel)
-                dataObserve.postValue(ViewState.Success(data))
+                _dataObserve.postValue(ViewState.Success(data))
             } catch (e: Exception) {
                 if (e is IOException)
-                    dataObserve.postValue(ViewState.NetworkError)
-                else dataObserve.postValue(ViewState.Error(e.message.toString()))
+                    _dataObserve.postValue(ViewState.NetworkError)
+                else _dataObserve.postValue(ViewState.Error(e.message.toString()))
                 e.printStackTrace()
             }
         }
